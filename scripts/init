@@ -1,0 +1,13 @@
+#!/bin/bash
+cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
+export EZBAKE_ENCRYPTION_SECRET=$(runuser ezca -l sh -c 'echo ${EZBAKE_ENCRYPTION_SECRET}')
+
+CA_NAME=${EZCA_CA_CN:-"ezbakeca"}
+CA_ENV=${EZCA_CA_ENV:-"local"}
+CLIENTS=${EZCA_CLIENTS:-"_Ez_Security,_Ez_EFE,_Ez_EFEUI,_Ez_Registration,_Ez_Deployer,_Ez_INS_REG"}
+
+cd "${cwd}"
+EXE="app/ezcaservice/ezcaservice init --ca-name "${CA_NAME}" -e "${CA_ENV}" -c ${CLIENTS}"
+BOOTSTRAP="java -jar bin/ezca-bootstrap -d _EZ_CA_ -o gen -n ${CLIENTS}"
+runuser ezca -c "$EXE"
+runuser ezca -c "$BOOTSTRAP"

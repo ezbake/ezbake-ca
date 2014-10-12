@@ -1,0 +1,6 @@
+#!/bin/bash
+cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
+
+cd "${cwd}"
+EXE="nohup app/ezcaservice/ezcaservice server --host $(hostname) -q -p _Ez_Registration &>/dev/null"
+runuser ezca -c "$EXE & echo \$! > pidfile"

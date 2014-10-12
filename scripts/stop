@@ -1,0 +1,14 @@
+#!/bin/bash
+cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
+cd "${cwd}"
+
+if [ ! -f pidfile ]; then
+    echo "Not running"
+    exit 0
+fi
+
+pid=$(<pidfile)
+runuser ezca -c "kill ${pid}"
+if [ $? ]; then
+    rm pidfile
+fi
